@@ -1,0 +1,73 @@
+{
+  "cve_to_compliance": {
+    "CVE_CRITICAL": {
+      "nist": ["SI-2 (Flaw Remediation)", "RA-5 (Vulnerability Scanning)", "CM-6 (Configuration Settings)"],
+      "iso27001": ["A.12.6.1 (Management of Technical Vulnerabilities)", "A.14.2.2 (System Change Control)"],
+      "hipaa": ["164.308(a)(5)(ii)(B) (Protection from Malicious Software)", "164.312(a)(1) (Access Control)"]
+    },
+    "CVE_HIGH": {
+      "nist": ["SI-2 (Flaw Remediation)", "RA-5 (Vulnerability Scanning)"],
+      "iso27001": ["A.12.6.1 (Management of Technical Vulnerabilities)"],
+      "hipaa": ["164.308(a)(5)(ii)(B) (Protection from Malicious Software)"]
+    },
+    "CVE_MEDIUM": {
+      "nist": ["SI-2 (Flaw Remediation)"],
+      "iso27001": ["A.12.6.1 (Management of Technical Vulnerabilities)"],
+      "hipaa": ["164.306(a) (General Requirements)"]
+    },
+    "CVE_LOW": {
+      "nist": ["SI-2 (Flaw Remediation)"],
+      "iso27001": ["A.12.6.1 (Management of Technical Vulnerabilities)"],
+      "hipaa": []
+    }
+  },
+  "policy_to_compliance": {
+    "s3_public_access": {
+      "nist": ["AC-3 (Access Enforcement)", "AC-6 (Least Privilege)", "SC-7 (Boundary Protection)"],
+      "iso27001": ["A.9.4.1 (Information Access Restriction)", "A.13.1.1 (Network Controls)"],
+      "hipaa": ["164.312(a)(1) (Access Control)", "164.312(e)(1) (Transmission Security)"]
+    },
+    "iam_wildcard": {
+      "nist": ["AC-6 (Least Privilege)", "AC-2 (Account Management)", "IA-2 (Identification and Authentication)"],
+      "iso27001": ["A.9.2.3 (Management of Privileged Access Rights)", "A.9.4.1 (Information Access Restriction)"],
+      "hipaa": ["164.312(a)(1) (Access Control)", "164.312(d) (Person or Entity Authentication)"]
+    },
+    "encryption_disabled": {
+      "nist": ["SC-28 (Protection of Information at Rest)", "SC-12 (Cryptographic Key Management)"],
+      "iso27001": ["A.10.1.1 (Policy on the Use of Cryptographic Controls)", "A.10.1.2 (Key Management)"],
+      "hipaa": ["164.312(a)(2)(iv) (Encryption and Decryption)", "164.312(e)(2)(ii) (Encryption)"]
+    },
+    "logging_disabled": {
+      "nist": ["AU-2 (Audit Events)", "AU-3 (Content of Audit Records)", "AU-6 (Audit Review)"],
+      "iso27001": ["A.12.4.1 (Event Logging)", "A.12.4.3 (Administrator and Operator Logs)"],
+      "hipaa": ["164.312(b) (Audit Controls)", "164.308(a)(1)(ii)(D) (Information System Activity Review)"]
+    },
+    "mfa_not_required": {
+      "nist": ["IA-2(1) (MFA to Privileged Accounts)", "IA-2(2) (MFA to Non-Privileged Accounts)"],
+      "iso27001": ["A.9.4.2 (Secure Log-on Procedures)"],
+      "hipaa": ["164.312(d) (Person or Entity Authentication)"]
+    },
+    "privileged_container": {
+      "nist": ["CM-7 (Least Functionality)", "AC-6 (Least Privilege)", "SC-39 (Process Isolation)"],
+      "iso27001": ["A.9.2.3 (Management of Privileged Access Rights)", "A.14.2.5 (Secure System Engineering Principles)"],
+      "hipaa": ["164.312(a)(1) (Access Control)"]
+    },
+    "root_container": {
+      "nist": ["AC-6(2) (Non-Privileged Access for Non-Security Functions)", "CM-7 (Least Functionality)"],
+      "iso27001": ["A.9.2.3 (Management of Privileged Access Rights)"],
+      "hipaa": ["164.312(a)(1) (Access Control)"]
+    }
+  },
+  "correlated_to_compliance": {
+    "exposed_vulnerability": {
+      "nist": ["SI-2 (Flaw Remediation)", "SC-7 (Boundary Protection)", "RA-5 (Vulnerability Scanning)"],
+      "iso27001": ["A.12.6.1 (Management of Technical Vulnerabilities)", "A.13.1.1 (Network Controls)"],
+      "hipaa": ["164.308(a)(1)(ii)(A) (Risk Analysis)", "164.312(a)(1) (Access Control)"]
+    },
+    "privilege_escalation_risk": {
+      "nist": ["AC-6 (Least Privilege)", "CM-7 (Least Functionality)", "SC-39 (Process Isolation)"],
+      "iso27001": ["A.9.2.3 (Management of Privileged Access Rights)", "A.14.2.5 (Secure System Engineering Principles)"],
+      "hipaa": ["164.312(a)(1) (Access Control)", "164.308(a)(1)(ii)(A) (Risk Analysis)"]
+    }
+  }
+}

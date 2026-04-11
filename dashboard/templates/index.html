@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CloudShield — Unified Detection and Remediation Dashboard">
+    <title>CloudShield Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header id="main-header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="shield-icon">🛡️</span>
+                <h1>CloudShield</h1>
+                <span class="subtitle">Unified Detection & Remediation</span>
+            </div>
+            <div class="header-actions">
+                <button id="btn-scan" class="btn btn-primary" onclick="runScan()">
+                    <span class="btn-icon">⚡</span> Run Scan
+                </button>
+                <button id="btn-demo" class="btn btn-accent" onclick="runDemo()">
+                    <span class="btn-icon">🔄</span> Demo Mode
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="dashboard-main">
+        <!-- Pipeline Flow -->
+        <section id="pipeline-section" class="section">
+            <h2 class="section-title">Execution Pipeline</h2>
+            <div id="pipeline-flow" class="pipeline">
+                <div class="pipeline-step" data-step="scan">
+                    <div class="step-icon">🔍</div>
+                    <div class="step-label">Scanner</div>
+                    <div class="step-status">Idle</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step" data-step="policy">
+                    <div class="step-icon">📋</div>
+                    <div class="step-label">Policy Check</div>
+                    <div class="step-status">Idle</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step" data-step="correlate">
+                    <div class="step-icon">🔗</div>
+                    <div class="step-label">Correlation</div>
+                    <div class="step-status">Idle</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step" data-step="risk">
+                    <div class="step-icon">📊</div>
+                    <div class="step-label">Risk Score</div>
+                    <div class="step-status">Idle</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step" data-step="remediate">
+                    <div class="step-icon">🔧</div>
+                    <div class="step-label">Remediation</div>
+                    <div class="step-status">Idle</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step" data-step="compliance">
+                    <div class="step-icon">✅</div>
+                    <div class="step-label">Compliance</div>
+                    <div class="step-status">Idle</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary Cards -->
+        <section id="summary-section" class="section">
+            <div class="cards-grid">
+                <div class="card card-vulns" id="card-vulns">
+                    <div class="card-icon">🐛</div>
+                    <div class="card-value" id="total-vulns">—</div>
+                    <div class="card-label">Vulnerabilities</div>
+                </div>
+                <div class="card card-misconfig" id="card-misconfig">
+                    <div class="card-icon">⚙️</div>
+                    <div class="card-value" id="total-misconfig">—</div>
+                    <div class="card-label">Misconfigurations</div>
+                </div>
+                <div class="card card-correlated" id="card-correlated">
+                    <div class="card-icon">🔗</div>
+                    <div class="card-value" id="total-correlated">—</div>
+                    <div class="card-label">Correlated</div>
+                </div>
+                <div class="card card-risk" id="card-risk">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-value" id="risk-score">—</div>
+                    <div class="card-label">Risk Score</div>
+                    <div class="card-badge" id="risk-category">—</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Row -->
+        <section id="charts-section" class="section">
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Severity Distribution</h3>
+                    <canvas id="severity-bar-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Finding Sources</h3>
+                    <canvas id="source-doughnut-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Risk Stream Breakdown</h3>
+                    <canvas id="stream-bar-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Before/After Comparison (Demo Mode) -->
+        <section id="comparison-section" class="section hidden">
+            <h2 class="section-title">Before vs After Comparison</h2>
+            <div class="comparison-grid">
+                <div class="comparison-card before">
+                    <h3>🔴 BEFORE (Vulnerable)</h3>
+                    <div class="comp-stat"><span>Issues:</span> <span id="comp-before-issues">—</span></div>
+                    <div class="comp-stat"><span>Critical:</span> <span id="comp-before-crit">—</span></div>
+                    <div class="comp-stat"><span>Risk Score:</span> <span id="comp-before-score">—</span></div>
+                    <div class="comp-stat"><span>Category:</span> <span id="comp-before-cat">—</span></div>
+                </div>
+                <div class="comparison-arrow">
+                    <div class="reduction-badge" id="reduction-badge">—</div>
+                </div>
+                <div class="comparison-card after">
+                    <h3>🟢 AFTER (Remediated)</h3>
+                    <div class="comp-stat"><span>Issues:</span> <span id="comp-after-issues">—</span></div>
+                    <div class="comp-stat"><span>Critical:</span> <span id="comp-after-crit">—</span></div>
+                    <div class="comp-stat"><span>Risk Score:</span> <span id="comp-after-score">—</span></div>
+                    <div class="comp-stat"><span>Category:</span> <span id="comp-after-cat">—</span></div>
+                </div>
+            </div>
+            <div class="chart-card" style="margin-top:1.5rem;">
+                <h3>Risk Trend</h3>
+                <canvas id="trend-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Top 5 Critical Issues -->
+        <section id="top-issues-section" class="section">
+            <h2 class="section-title">Top 5 Critical Issues</h2>
+            <div class="table-container">
+                <table id="top-issues-table">
+                    <thead>
+                        <tr>
+                            <th>#</th><th>Issue ID</th><th>Source</th><th>Severity</th><th>Score</th><th>Remediation</th>
+                        </tr>
+                    </thead>
+                    <tbody id="top-issues-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Execution Log -->
+        <section id="log-section" class="section">
+            <h2 class="section-title">Execution Log</h2>
+            <div class="log-container" id="execution-log">
+                <div class="log-placeholder">Run a scan or demo to see execution log...</div>
+            </div>
+        </section>
+
+        <!-- Full Findings Table -->
+        <section id="findings-section" class="section">
+            <h2 class="section-title">All Findings</h2>
+            <div class="table-container">
+                <table id="findings-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Type</th><th>Severity</th><th>Title</th><th>Fix</th><th>Compliance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="findings-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>CloudShield — DevSecOps Pipeline Dashboard • No AI/LLM • Deterministic Analysis</p>
+    </footer>
+
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>

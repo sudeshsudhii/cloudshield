@@ -1,0 +1,59 @@
+{
+  "s3_buckets": [
+    {
+      "name": "app-data-public-bucket",
+      "region": "us-east-1",
+      "acl": "public-read",
+      "public_access_block": {
+        "block_public_acls": false,
+        "block_public_policy": false,
+        "ignore_public_acls": false,
+        "restrict_public_buckets": false
+      },
+      "encryption": {
+        "enabled": false,
+        "algorithm": null
+      },
+      "versioning": false,
+      "logging": {
+        "enabled": false
+      }
+    }
+  ],
+  "iam_roles": [
+    {
+      "name": "admin-full-access-role",
+      "policies": [
+        {
+          "name": "FullAdminAccess",
+          "effect": "Allow",
+          "action": "*",
+          "resource": "*"
+        }
+      ],
+      "mfa_required": false
+    },
+    {
+      "name": "s3-overpermissive-role",
+      "policies": [
+        {
+          "name": "S3FullAccess",
+          "effect": "Allow",
+          "action": "s3:*",
+          "resource": "*"
+        }
+      ],
+      "mfa_required": false
+    }
+  ],
+  "cloudtrail": {
+    "enabled": false,
+    "multi_region": false,
+    "log_file_validation": false
+  },
+  "container_config": {
+    "privileged": true,
+    "run_as_root": true,
+    "read_only_rootfs": false
+  }
+}

@@ -1,0 +1,1156 @@
+{
+  "cached_at": 1775583030.3369932,
+  "data": {
+    "timestamp": "2026-04-07T23:00:30.335170",
+    "findings": [
+      {
+        "id": "CVE-2021-3449",
+        "source": "trivy",
+        "type": "CVE",
+        "severity": "HIGH",
+        "package": "openssl",
+        "installed_version": "1.1.0l-1~deb9u1",
+        "fixed_version": "1.1.0l-1~deb9u6",
+        "title": "OpenSSL: NULL pointer deref in signature_algorithms processing",
+        "description": "An OpenSSL TLS server may crash if sent a maliciously crafted renegotiation ClientHello message.",
+        "target": "nginx:1.14 (debian 9.13)",
+        "pkg_type": "debian",
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2021-3449"
+        ],
+        "compliance": {
+          "nist": [
+            "SI-2 (Flaw Remediation)",
+            "RA-5 (Vulnerability Scanning)"
+          ],
+          "iso27001": [
+            "A.12.6.1 (Management of Technical Vulnerabilities)"
+          ],
+          "hipaa": [
+            "164.308(a)(5)(ii)(B) (Protection from Malicious Software)"
+          ]
+        }
+      },
+      {
+        "id": "CVE-2021-23840",
+        "source": "trivy",
+        "type": "CVE",
+        "severity": "HIGH",
+        "package": "openssl",
+        "installed_version": "1.1.0l-1~deb9u1",
+        "fixed_version": "1.1.0l-1~deb9u6",
+        "title": "OpenSSL: Integer overflow in CipherUpdate",
+        "description": "Calls to EVP_CipherUpdate, EVP_EncryptUpdate and EVP_DecryptUpdate may overflow.",
+        "target": "nginx:1.14 (debian 9.13)",
+        "pkg_type": "debian",
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2021-23840"
+        ],
+        "compliance": {
+          "nist": [
+            "SI-2 (Flaw Remediation)",
+            "RA-5 (Vulnerability Scanning)"
+          ],
+          "iso27001": [
+            "A.12.6.1 (Management of Technical Vulnerabilities)"
+          ],
+          "hipaa": [
+            "164.308(a)(5)(ii)(B) (Protection from Malicious Software)"
+          ]
+        }
+      },
+      {
+        "id": "CVE-2019-3462",
+        "source": "trivy",
+        "type": "CVE",
+        "severity": "CRITICAL",
+        "package": "apt",
+        "installed_version": "1.4.9",
+        "fixed_version": "1.4.11",
+        "title": "apt: Incorrect handling of HTTP redirects in package downloads",
+        "description": "Incorrect handling of HTTP redirects allows MITM attacks leading to arbitrary code execution.",
+        "target": "nginx:1.14 (debian 9.13)",
+        "pkg_type": "debian",
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2019-3462"
+        ],
+        "compliance": {
+          "nist": [
+            "SI-2 (Flaw Remediation)",
+            "RA-5 (Vulnerability Scanning)",
+            "CM-6 (Configuration Settings)"
+          ],
+          "iso27001": [
+            "A.12.6.1 (Management of Technical Vulnerabilities)",
+            "A.14.2.2 (System Change Control)"
+          ],
+          "hipaa": [
+            "164.308(a)(5)(ii)(B) (Protection from Malicious Software)",
+            "164.312(a)(1) (Access Control)"
+          ]
+        }
+      },
+      {
+        "id": "CVE-2020-1971",
+        "source": "trivy",
+        "type": "CVE",
+        "severity": "MEDIUM",
+        "package": "openssl",
+        "installed_version": "1.1.0l-1~deb9u1",
+        "fixed_version": "1.1.0l-1~deb9u4",
+        "title": "OpenSSL: NULL pointer deref in GENERAL_NAME_cmp",
+        "description": "The X.509 GeneralName type can contain different types of name including EDIPARTYNAME.",
+        "target": "nginx:1.14 (debian 9.13)",
+        "pkg_type": "debian",
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2020-1971"
+        ],
+        "compliance": {
+          "nist": [
+            "SI-2 (Flaw Remediation)"
+          ],
+          "iso27001": [
+            "A.12.6.1 (Management of Technical Vulnerabilities)"
+          ],
+          "hipaa": [
+            "164.306(a) (General Requirements)"
+          ]
+        }
+      },
+      {
+        "id": "CVE-2021-33574",
+        "source": "trivy",
+        "type": "CVE",
+        "severity": "CRITICAL",
+        "package": "glibc",
+        "installed_version": "2.24-11+deb9u4",
+        "fixed_version": "",
+        "title": "glibc: mq_notify does not handle separately allocated thread attributes",
+        "description": "The mq_notify function in the GNU C Library has a use-after-free vulnerability.",
+        "target": "nginx:1.14 (debian 9.13)",
+        "pkg_type": "debian",
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2021-33574"
+        ],
+        "compliance": {
+          "nist": [
+            "SI-2 (Flaw Remediation)",
+            "RA-5 (Vulnerability Scanning)",
+            "CM-6 (Configuration Settings)"
+          ],
+          "iso27001": [
+            "A.12.6.1 (Management of Technical Vulnerabilities)",
+            "A.14.2.2 (System Change Control)"
+          ],
+          "hipaa": [
+            "164.308(a)(5)(ii)(B) (Protection from Malicious Software)",
+            "164.312(a)(1) (Access Control)"
+          ]
+        }
+      },
+      {
+        "id": "CVE-2019-18276",
+        "source": "trivy",
+        "type": "CVE",
+        "severity": "LOW",
+        "package": "bash",
+        "installed_version": "4.4-5",
+        "fixed_version": "4.4-5+deb9u1",
+        "title": "bash: when effective UID is not equal to its real UID, the saved UID is not dropped",
+        "description": "An issue was discovered in disable_priv_mode in shell.c in GNU Bash.",
+        "target": "nginx:1.14 (debian 9.13)",
+        "pkg_type": "debian",
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2019-18276"
+        ],
+        "compliance": {
+          "nist": [
+            "SI-2 (Flaw Remediation)"
+          ],
+          "iso27001": [
+            "A.12.6.1 (Management of Technical Vulnerabilities)"
+          ],
+          "hipaa": []
+        }
+      },
+      {
+        "id": "CVE-2020-8169",
+        "source": "trivy",
+        "type": "CVE",
+        "severity": "HIGH",
+        "package": "curl",
+        "installed_version": "7.52.1-5+deb9u9",
+        "fixed_version": "7.52.1-5+deb9u14",
+        "title": "curl: Partial password leak over DNS on HTTP redirect",
+        "description": "curl can be tricked to include part of the password in the host name before resolving it.",
+        "target": "nginx:1.14 (debian 9.13)",
+        "pkg_type": "debian",
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2020-8169"
+        ],
+        "compliance": {
+          "nist": [
+            "SI-2 (Flaw Remediation)",
+            "RA-5 (Vulnerability Scanning)"
+          ],
+          "iso27001": [
+            "A.12.6.1 (Management of Technical Vulnerabilities)"
+          ],
+          "hipaa": [
+            "164.308(a)(5)(ii)(B) (Protection from Malicious Software)"
+          ]
+        }
+      },
+      {
+        "id": "CVE-2018-16842",
+        "source": "trivy",
+        "type": "CVE",
+        "severity": "MEDIUM",
+        "package": "curl",
+        "installed_version": "7.52.1-5+deb9u9",
+        "fixed_version": "7.52.1-5+deb9u10",
+        "title": "curl: Heap-based buffer over-read in the curl tool warning formatting",
+        "description": "Curl versions 7.14.1 through 7.61.1 are vulnerable to a heap-based buffer over-read.",
+        "target": "nginx:1.14 (debian 9.13)",
+        "pkg_type": "debian",
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2018-16842"
+        ],
+        "compliance": {
+          "nist": [
+            "SI-2 (Flaw Remediation)"
+          ],
+          "iso27001": [
+            "A.12.6.1 (Management of Technical Vulnerabilities)"
+          ],
+          "hipaa": [
+            "164.306(a) (General Requirements)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-S3-PUBLIC-1",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "HIGH",
+        "policy": "cloudshield.s3_public",
+        "rule_file": "s3_public.rego",
+        "message": "S3 bucket 'app-data-public-bucket' has public-read ACL",
+        "title": "S3 Public Access",
+        "description": "S3 bucket 'app-data-public-bucket' has public-read ACL allowing public access",
+        "compliance": {
+          "nist": [
+            "AC-3 (Access Enforcement)",
+            "AC-6 (Least Privilege)",
+            "SC-7 (Boundary Protection)"
+          ],
+          "iso27001": [
+            "A.9.4.1 (Information Access Restriction)",
+            "A.13.1.1 (Network Controls)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)",
+            "164.312(e)(1) (Transmission Security)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-S3-PUBLIC-2",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "HIGH",
+        "policy": "cloudshield.s3_public",
+        "rule_file": "s3_public.rego",
+        "message": "S3 bucket 'app-data-public-bucket': BlockPublicAcls is not enabled",
+        "title": "S3 Public Access Block",
+        "description": "S3 bucket 'app-data-public-bucket' does not block public ACLs",
+        "compliance": {
+          "nist": [
+            "AC-3 (Access Enforcement)",
+            "AC-6 (Least Privilege)",
+            "SC-7 (Boundary Protection)"
+          ],
+          "iso27001": [
+            "A.9.4.1 (Information Access Restriction)",
+            "A.13.1.1 (Network Controls)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)",
+            "164.312(e)(1) (Transmission Security)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-S3-PUBLIC-3",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "HIGH",
+        "policy": "cloudshield.s3_public",
+        "rule_file": "s3_public.rego",
+        "message": "S3 bucket 'app-data-public-bucket': BlockPublicPolicy is not enabled",
+        "title": "S3 Public Policy Block",
+        "description": "S3 bucket 'app-data-public-bucket' does not block public policies",
+        "compliance": {
+          "nist": [
+            "AC-3 (Access Enforcement)",
+            "AC-6 (Least Privilege)",
+            "SC-7 (Boundary Protection)"
+          ],
+          "iso27001": [
+            "A.9.4.1 (Information Access Restriction)",
+            "A.13.1.1 (Network Controls)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)",
+            "164.312(e)(1) (Transmission Security)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-CIS-ENCRYPTION-4",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "HIGH",
+        "policy": "cloudshield.cis_basic",
+        "rule_file": "cis_basic.rego",
+        "message": "S3 bucket 'app-data-public-bucket': encryption at rest is not enabled (CIS 2.1.1)",
+        "title": "Encryption Not Enabled",
+        "description": "S3 bucket 'app-data-public-bucket' does not have encryption at rest",
+        "compliance": {
+          "nist": [
+            "AC-3 (Access Enforcement)",
+            "AC-6 (Least Privilege)",
+            "SC-7 (Boundary Protection)"
+          ],
+          "iso27001": [
+            "A.9.4.1 (Information Access Restriction)",
+            "A.13.1.1 (Network Controls)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)",
+            "164.312(e)(1) (Transmission Security)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-CIS-LOGGING-5",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "MEDIUM",
+        "policy": "cloudshield.cis_basic",
+        "rule_file": "cis_basic.rego",
+        "message": "S3 bucket 'app-data-public-bucket': access logging is not enabled (CIS 2.1.2)",
+        "title": "Logging Not Enabled",
+        "description": "S3 bucket 'app-data-public-bucket' does not have access logging",
+        "compliance": {
+          "nist": [
+            "AC-3 (Access Enforcement)",
+            "AC-6 (Least Privilege)",
+            "SC-7 (Boundary Protection)"
+          ],
+          "iso27001": [
+            "A.9.4.1 (Information Access Restriction)",
+            "A.13.1.1 (Network Controls)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)",
+            "164.312(e)(1) (Transmission Security)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-IAM-WILDCARD-6",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "CRITICAL",
+        "policy": "cloudshield.iam_wildcard",
+        "rule_file": "iam_wildcard.rego",
+        "message": "IAM role 'admin-full-access-role' policy 'FullAdminAccess' grants wildcard Action '*'",
+        "title": "IAM Wildcard Action",
+        "description": "IAM policy grants unrestricted actions",
+        "compliance": {
+          "nist": [
+            "AC-6 (Least Privilege)",
+            "AC-2 (Account Management)",
+            "IA-2 (Identification and Authentication)"
+          ],
+          "iso27001": [
+            "A.9.2.3 (Management of Privileged Access Rights)",
+            "A.9.4.1 (Information Access Restriction)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)",
+            "164.312(d) (Person or Entity Authentication)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-IAM-WILDCARD-7",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "CRITICAL",
+        "policy": "cloudshield.iam_wildcard",
+        "rule_file": "iam_wildcard.rego",
+        "message": "IAM role 'admin-full-access-role' policy 'FullAdminAccess' grants access to all Resources '*'",
+        "title": "IAM Wildcard Resource",
+        "description": "IAM policy grants access to all resources",
+        "compliance": {
+          "nist": [
+            "AC-6 (Least Privilege)",
+            "AC-2 (Account Management)",
+            "IA-2 (Identification and Authentication)"
+          ],
+          "iso27001": [
+            "A.9.2.3 (Management of Privileged Access Rights)",
+            "A.9.4.1 (Information Access Restriction)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)",
+            "164.312(d) (Person or Entity Authentication)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-CIS-MFA-8",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "MEDIUM",
+        "policy": "cloudshield.cis_basic",
+        "rule_file": "cis_basic.rego",
+        "message": "IAM role 'admin-full-access-role': MFA is not required (CIS 1.14)",
+        "title": "MFA Not Required",
+        "description": "IAM role does not require multi-factor authentication",
+        "compliance": {
+          "nist": [
+            "IA-2(1) (MFA to Privileged Accounts)",
+            "IA-2(2) (MFA to Non-Privileged Accounts)"
+          ],
+          "iso27001": [
+            "A.9.4.2 (Secure Log-on Procedures)"
+          ],
+          "hipaa": [
+            "164.312(d) (Person or Entity Authentication)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-IAM-WILDCARD-9",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "CRITICAL",
+        "policy": "cloudshield.iam_wildcard",
+        "rule_file": "iam_wildcard.rego",
+        "message": "IAM role 's3-overpermissive-role' policy 'S3FullAccess' grants access to all Resources '*'",
+        "title": "IAM Wildcard Resource",
+        "description": "IAM policy grants access to all resources",
+        "compliance": {
+          "nist": [
+            "AC-6 (Least Privilege)",
+            "AC-2 (Account Management)",
+            "IA-2 (Identification and Authentication)"
+          ],
+          "iso27001": [
+            "A.9.2.3 (Management of Privileged Access Rights)",
+            "A.9.4.1 (Information Access Restriction)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)",
+            "164.312(d) (Person or Entity Authentication)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-IAM-WILDCARD-10",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "CRITICAL",
+        "policy": "cloudshield.iam_wildcard",
+        "rule_file": "iam_wildcard.rego",
+        "message": "IAM role 's3-overpermissive-role' policy 'S3FullAccess' grants wildcard service action 's3:*'",
+        "title": "IAM Service Wildcard",
+        "description": "IAM policy grants all actions for a service",
+        "compliance": {
+          "nist": [
+            "AC-6 (Least Privilege)",
+            "AC-2 (Account Management)",
+            "IA-2 (Identification and Authentication)"
+          ],
+          "iso27001": [
+            "A.9.2.3 (Management of Privileged Access Rights)",
+            "A.9.4.1 (Information Access Restriction)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)",
+            "164.312(d) (Person or Entity Authentication)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-CIS-MFA-11",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "MEDIUM",
+        "policy": "cloudshield.cis_basic",
+        "rule_file": "cis_basic.rego",
+        "message": "IAM role 's3-overpermissive-role': MFA is not required (CIS 1.14)",
+        "title": "MFA Not Required",
+        "description": "IAM role does not require multi-factor authentication",
+        "compliance": {
+          "nist": [
+            "IA-2(1) (MFA to Privileged Accounts)",
+            "IA-2(2) (MFA to Non-Privileged Accounts)"
+          ],
+          "iso27001": [
+            "A.9.4.2 (Secure Log-on Procedures)"
+          ],
+          "hipaa": [
+            "164.312(d) (Person or Entity Authentication)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-CIS-CLOUDTRAIL-12",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "HIGH",
+        "policy": "cloudshield.cis_basic",
+        "rule_file": "cis_basic.rego",
+        "message": "CloudTrail is not enabled (CIS 3.1)",
+        "title": "CloudTrail Disabled",
+        "description": "AWS CloudTrail logging is not enabled",
+        "compliance": {
+          "nist": [
+            "AU-2 (Audit Events)",
+            "AU-3 (Content of Audit Records)",
+            "AU-6 (Audit Review)"
+          ],
+          "iso27001": [
+            "A.12.4.1 (Event Logging)",
+            "A.12.4.3 (Administrator and Operator Logs)"
+          ],
+          "hipaa": [
+            "164.312(b) (Audit Controls)",
+            "164.308(a)(1)(ii)(D) (Information System Activity Review)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-CIS-CONTAINER-13",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "CRITICAL",
+        "policy": "cloudshield.cis_basic",
+        "rule_file": "cis_basic.rego",
+        "message": "Container runs in privileged mode (CIS Docker 5.4)",
+        "title": "Privileged Container",
+        "description": "Container is running with full host privileges",
+        "compliance": {
+          "nist": [
+            "CM-7 (Least Functionality)",
+            "AC-6 (Least Privilege)",
+            "SC-39 (Process Isolation)"
+          ],
+          "iso27001": [
+            "A.9.2.3 (Management of Privileged Access Rights)",
+            "A.14.2.5 (Secure System Engineering Principles)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-CIS-CONTAINER-14",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "HIGH",
+        "policy": "cloudshield.cis_basic",
+        "rule_file": "cis_basic.rego",
+        "message": "Container runs as root user (CIS Docker 5.7)",
+        "title": "Root Container",
+        "description": "Container process runs as the root user",
+        "compliance": {
+          "nist": [
+            "AC-6(2) (Non-Privileged Access for Non-Security Functions)",
+            "CM-7 (Least Functionality)"
+          ],
+          "iso27001": [
+            "A.9.2.3 (Management of Privileged Access Rights)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)"
+          ]
+        }
+      },
+      {
+        "id": "POLICY-CIS-CONTAINER-15",
+        "source": "opa",
+        "type": "POLICY",
+        "severity": "MEDIUM",
+        "policy": "cloudshield.cis_basic",
+        "rule_file": "cis_basic.rego",
+        "message": "Container root filesystem is not read-only (CIS Docker 5.12)",
+        "title": "Writable Root Filesystem",
+        "description": "Container root filesystem allows writes",
+        "compliance": {
+          "nist": [
+            "AC-6(2) (Non-Privileged Access for Non-Security Functions)",
+            "CM-7 (Least Functionality)"
+          ],
+          "iso27001": [
+            "A.9.2.3 (Management of Privileged Access Rights)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)"
+          ]
+        }
+      },
+      {
+        "id": "CORR-EXPOSED-VULN-1",
+        "source": "correlation",
+        "type": "CORRELATED",
+        "severity": "CRITICAL",
+        "correlation_rule": "exposed_vulnerability",
+        "source_finding_ids": [
+          "CVE-2019-3462",
+          "POLICY-S3-PUBLIC-1"
+        ],
+        "title": "High-Severity CVE in Publicly Exposed Workload",
+        "description": "Critical vulnerability 'CVE-2019-3462' in package 'apt' is running in an environment with public exposure: S3 bucket 'app-data-public-bucket' has public-read ACL. This combination significantly increases exploitation risk.",
+        "message": "Vulnerability CVE-2019-3462 (CRITICAL) combined with exposed resource creates elevated risk",
+        "compliance": {
+          "nist": [
+            "SI-2 (Flaw Remediation)",
+            "SC-7 (Boundary Protection)",
+            "RA-5 (Vulnerability Scanning)"
+          ],
+          "iso27001": [
+            "A.12.6.1 (Management of Technical Vulnerabilities)",
+            "A.13.1.1 (Network Controls)"
+          ],
+          "hipaa": [
+            "164.308(a)(1)(ii)(A) (Risk Analysis)",
+            "164.312(a)(1) (Access Control)"
+          ]
+        }
+      },
+      {
+        "id": "CORR-PRIV-ESCALATION-2",
+        "source": "correlation",
+        "type": "CORRELATED",
+        "severity": "CRITICAL",
+        "correlation_rule": "privilege_escalation_risk",
+        "source_finding_ids": [
+          "POLICY-CIS-CONTAINER-13",
+          "POLICY-IAM-WILDCARD-6"
+        ],
+        "title": "Privileged Container with Wildcard IAM Permissions",
+        "description": "Container running with elevated privileges (Container runs in privileged mode (CIS Docker 5.4)) combined with overly permissive IAM policy (IAM role 'admin-full-access-role' policy 'FullAdminAccess' grants wildcard Action '*'). This creates a privilege escalation path where a compromised container could gain unrestricted cloud access.",
+        "message": "Privileged container + wildcard IAM = critical privilege escalation risk",
+        "compliance": {
+          "nist": [
+            "AC-6 (Least Privilege)",
+            "CM-7 (Least Functionality)",
+            "SC-39 (Process Isolation)"
+          ],
+          "iso27001": [
+            "A.9.2.3 (Management of Privileged Access Rights)",
+            "A.14.2.5 (Secure System Engineering Principles)"
+          ],
+          "hipaa": [
+            "164.312(a)(1) (Access Control)",
+            "164.308(a)(1)(ii)(A) (Risk Analysis)"
+          ]
+        }
+      }
+    ],
+    "risk": {
+      "final_score": 3.16,
+      "category": "HIGH",
+      "cve_score": 2.75,
+      "policy_score": 3.07,
+      "correlated_score": 4.0,
+      "finding_count": 25,
+      "per_finding_scores": [
+        {
+          "id": "CVE-2021-3449",
+          "source": "trivy",
+          "severity": "HIGH",
+          "score": 3.0
+        },
+        {
+          "id": "CVE-2021-23840",
+          "source": "trivy",
+          "severity": "HIGH",
+          "score": 3.0
+        },
+        {
+          "id": "CVE-2019-3462",
+          "source": "trivy",
+          "severity": "CRITICAL",
+          "score": 4.0
+        },
+        {
+          "id": "CVE-2020-1971",
+          "source": "trivy",
+          "severity": "MEDIUM",
+          "score": 2.0
+        },
+        {
+          "id": "CVE-2021-33574",
+          "source": "trivy",
+          "severity": "CRITICAL",
+          "score": 4.0
+        },
+        {
+          "id": "CVE-2019-18276",
+          "source": "trivy",
+          "severity": "LOW",
+          "score": 1.0
+        },
+        {
+          "id": "CVE-2020-8169",
+          "source": "trivy",
+          "severity": "HIGH",
+          "score": 3.0
+        },
+        {
+          "id": "CVE-2018-16842",
+          "source": "trivy",
+          "severity": "MEDIUM",
+          "score": 2.0
+        },
+        {
+          "id": "POLICY-S3-PUBLIC-1",
+          "source": "opa",
+          "severity": "HIGH",
+          "score": 3.0
+        },
+        {
+          "id": "POLICY-S3-PUBLIC-2",
+          "source": "opa",
+          "severity": "HIGH",
+          "score": 3.0
+        },
+        {
+          "id": "POLICY-S3-PUBLIC-3",
+          "source": "opa",
+          "severity": "HIGH",
+          "score": 3.0
+        },
+        {
+          "id": "POLICY-CIS-ENCRYPTION-4",
+          "source": "opa",
+          "severity": "HIGH",
+          "score": 3.0
+        },
+        {
+          "id": "POLICY-CIS-LOGGING-5",
+          "source": "opa",
+          "severity": "MEDIUM",
+          "score": 2.0
+        },
+        {
+          "id": "POLICY-IAM-WILDCARD-6",
+          "source": "opa",
+          "severity": "CRITICAL",
+          "score": 4.0
+        },
+        {
+          "id": "POLICY-IAM-WILDCARD-7",
+          "source": "opa",
+          "severity": "CRITICAL",
+          "score": 4.0
+        },
+        {
+          "id": "POLICY-CIS-MFA-8",
+          "source": "opa",
+          "severity": "MEDIUM",
+          "score": 2.0
+        },
+        {
+          "id": "POLICY-IAM-WILDCARD-9",
+          "source": "opa",
+          "severity": "CRITICAL",
+          "score": 4.0
+        },
+        {
+          "id": "POLICY-IAM-WILDCARD-10",
+          "source": "opa",
+          "severity": "CRITICAL",
+          "score": 4.0
+        },
+        {
+          "id": "POLICY-CIS-MFA-11",
+          "source": "opa",
+          "severity": "MEDIUM",
+          "score": 2.0
+        },
+        {
+          "id": "POLICY-CIS-CLOUDTRAIL-12",
+          "source": "opa",
+          "severity": "HIGH",
+          "score": 3.0
+        },
+        {
+          "id": "POLICY-CIS-CONTAINER-13",
+          "source": "opa",
+          "severity": "CRITICAL",
+          "score": 4.0
+        },
+        {
+          "id": "POLICY-CIS-CONTAINER-14",
+          "source": "opa",
+          "severity": "HIGH",
+          "score": 3.0
+        },
+        {
+          "id": "POLICY-CIS-CONTAINER-15",
+          "source": "opa",
+          "severity": "MEDIUM",
+          "score": 2.0
+        },
+        {
+          "id": "CORR-EXPOSED-VULN-1",
+          "source": "correlation",
+          "severity": "CRITICAL",
+          "score": 4.0
+        },
+        {
+          "id": "CORR-PRIV-ESCALATION-2",
+          "source": "correlation",
+          "severity": "CRITICAL",
+          "score": 4.0
+        }
+      ]
+    },
+    "remediations": [
+      {
+        "finding_id": "CVE-2021-3449",
+        "type": "CVE",
+        "strategy": "package_upgrade",
+        "confidence": "high",
+        "title": "Upgrade openssl to 1.1.0l-1~deb9u6",
+        "command": "apt-get install --only-upgrade openssl=1.1.0l-1~deb9u6",
+        "description": "Upgrade openssl from 1.1.0l-1~deb9u1 to 1.1.0l-1~deb9u6 to fix CVE-2021-3449"
+      },
+      {
+        "finding_id": "CVE-2021-23840",
+        "type": "CVE",
+        "strategy": "package_upgrade",
+        "confidence": "high",
+        "title": "Upgrade openssl to 1.1.0l-1~deb9u6",
+        "command": "apt-get install --only-upgrade openssl=1.1.0l-1~deb9u6",
+        "description": "Upgrade openssl from 1.1.0l-1~deb9u1 to 1.1.0l-1~deb9u6 to fix CVE-2021-23840"
+      },
+      {
+        "finding_id": "CVE-2019-3462",
+        "type": "CVE",
+        "strategy": "package_upgrade",
+        "confidence": "high",
+        "title": "Upgrade apt to 1.4.11",
+        "command": "apt-get install --only-upgrade apt=1.4.11",
+        "description": "Upgrade apt from 1.4.9 to 1.4.11 to fix CVE-2019-3462"
+      },
+      {
+        "finding_id": "CVE-2020-1971",
+        "type": "CVE",
+        "strategy": "package_upgrade",
+        "confidence": "high",
+        "title": "Upgrade openssl to 1.1.0l-1~deb9u4",
+        "command": "apt-get install --only-upgrade openssl=1.1.0l-1~deb9u4",
+        "description": "Upgrade openssl from 1.1.0l-1~deb9u1 to 1.1.0l-1~deb9u4 to fix CVE-2020-1971"
+      },
+      {
+        "finding_id": "CVE-2021-33574",
+        "type": "CVE",
+        "strategy": "base_image_update",
+        "confidence": "medium",
+        "title": "Update base image for glibc",
+        "command": "# Update FROM nginx:1.14 to FROM nginx:latest",
+        "description": "No fixed version for glibc (CVE-2021-33574). Update base image."
+      },
+      {
+        "finding_id": "CVE-2019-18276",
+        "type": "CVE",
+        "strategy": "package_upgrade",
+        "confidence": "high",
+        "title": "Upgrade bash to 4.4-5+deb9u1",
+        "command": "apt-get install --only-upgrade bash=4.4-5+deb9u1",
+        "description": "Upgrade bash from 4.4-5 to 4.4-5+deb9u1 to fix CVE-2019-18276"
+      },
+      {
+        "finding_id": "CVE-2020-8169",
+        "type": "CVE",
+        "strategy": "package_upgrade",
+        "confidence": "high",
+        "title": "Upgrade curl to 7.52.1-5+deb9u14",
+        "command": "apt-get install --only-upgrade curl=7.52.1-5+deb9u14",
+        "description": "Upgrade curl from 7.52.1-5+deb9u9 to 7.52.1-5+deb9u14 to fix CVE-2020-8169"
+      },
+      {
+        "finding_id": "CVE-2018-16842",
+        "type": "CVE",
+        "strategy": "package_upgrade",
+        "confidence": "high",
+        "title": "Upgrade curl to 7.52.1-5+deb9u10",
+        "command": "apt-get install --only-upgrade curl=7.52.1-5+deb9u10",
+        "description": "Upgrade curl from 7.52.1-5+deb9u9 to 7.52.1-5+deb9u10 to fix CVE-2018-16842"
+      },
+      {
+        "finding_id": "POLICY-S3-PUBLIC-1",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Block S3 Public Access",
+        "command": "aws s3api put-public-access-block --bucket <BUCKET> --public-access-block-configuration BlockPublicAcls=true,BlockPublicPolicy=true,IgnorePublicAcls=true,RestrictPublicBuckets=true",
+        "description": "Fix: S3 bucket 'app-data-public-bucket' has public-read ACL"
+      },
+      {
+        "finding_id": "POLICY-S3-PUBLIC-2",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Block S3 Public Access",
+        "command": "aws s3api put-public-access-block --bucket <BUCKET> --public-access-block-configuration BlockPublicAcls=true,BlockPublicPolicy=true,IgnorePublicAcls=true,RestrictPublicBuckets=true",
+        "description": "Fix: S3 bucket 'app-data-public-bucket': BlockPublicAcls is not enabled"
+      },
+      {
+        "finding_id": "POLICY-S3-PUBLIC-3",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Block S3 Public Access",
+        "command": "aws s3api put-public-access-block --bucket <BUCKET> --public-access-block-configuration BlockPublicAcls=true,BlockPublicPolicy=true,IgnorePublicAcls=true,RestrictPublicBuckets=true",
+        "description": "Fix: S3 bucket 'app-data-public-bucket': BlockPublicPolicy is not enabled"
+      },
+      {
+        "finding_id": "POLICY-CIS-ENCRYPTION-4",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Block S3 Public Access",
+        "command": "aws s3api put-public-access-block --bucket <BUCKET> --public-access-block-configuration BlockPublicAcls=true,BlockPublicPolicy=true,IgnorePublicAcls=true,RestrictPublicBuckets=true",
+        "description": "Fix: S3 bucket 'app-data-public-bucket': encryption at rest is not enabled (CIS 2.1.1)"
+      },
+      {
+        "finding_id": "POLICY-CIS-LOGGING-5",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Block S3 Public Access",
+        "command": "aws s3api put-public-access-block --bucket <BUCKET> --public-access-block-configuration BlockPublicAcls=true,BlockPublicPolicy=true,IgnorePublicAcls=true,RestrictPublicBuckets=true",
+        "description": "Fix: S3 bucket 'app-data-public-bucket': access logging is not enabled (CIS 2.1.2)"
+      },
+      {
+        "finding_id": "POLICY-IAM-WILDCARD-6",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Apply Least-Privilege IAM",
+        "command": "Replace {\"Action\":\"*\",\"Resource\":\"*\"} with specific actions/resources.\naws iam put-role-policy --role-name <ROLE> --policy-name <POLICY> --policy-document file://least-privilege.json",
+        "description": "Fix: IAM role 'admin-full-access-role' policy 'FullAdminAccess' grants wildcard Action '*'"
+      },
+      {
+        "finding_id": "POLICY-IAM-WILDCARD-7",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Apply Least-Privilege IAM",
+        "command": "Replace {\"Action\":\"*\",\"Resource\":\"*\"} with specific actions/resources.\naws iam put-role-policy --role-name <ROLE> --policy-name <POLICY> --policy-document file://least-privilege.json",
+        "description": "Fix: IAM role 'admin-full-access-role' policy 'FullAdminAccess' grants access to all Resources '*'"
+      },
+      {
+        "finding_id": "POLICY-CIS-MFA-8",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Enable MFA",
+        "command": "Add Condition: {\"Bool\":{\"aws:MultiFactorAuthPresent\":\"true\"}} to IAM policy",
+        "description": "Fix: IAM role 'admin-full-access-role': MFA is not required (CIS 1.14)"
+      },
+      {
+        "finding_id": "POLICY-IAM-WILDCARD-9",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Apply Least-Privilege IAM",
+        "command": "Replace {\"Action\":\"*\",\"Resource\":\"*\"} with specific actions/resources.\naws iam put-role-policy --role-name <ROLE> --policy-name <POLICY> --policy-document file://least-privilege.json",
+        "description": "Fix: IAM role 's3-overpermissive-role' policy 'S3FullAccess' grants access to all Resources '*'"
+      },
+      {
+        "finding_id": "POLICY-IAM-WILDCARD-10",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Apply Least-Privilege IAM",
+        "command": "Replace {\"Action\":\"*\",\"Resource\":\"*\"} with specific actions/resources.\naws iam put-role-policy --role-name <ROLE> --policy-name <POLICY> --policy-document file://least-privilege.json",
+        "description": "Fix: IAM role 's3-overpermissive-role' policy 'S3FullAccess' grants wildcard service action 's3:*'"
+      },
+      {
+        "finding_id": "POLICY-CIS-MFA-11",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Enable MFA",
+        "command": "Add Condition: {\"Bool\":{\"aws:MultiFactorAuthPresent\":\"true\"}} to IAM policy",
+        "description": "Fix: IAM role 's3-overpermissive-role': MFA is not required (CIS 1.14)"
+      },
+      {
+        "finding_id": "POLICY-CIS-CLOUDTRAIL-12",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Enable Logging",
+        "command": "aws cloudtrail create-trail --name main-trail --s3-bucket-name <LOG_BUCKET> --is-multi-region-trail --enable-log-file-validation",
+        "description": "Fix: CloudTrail is not enabled (CIS 3.1)"
+      },
+      {
+        "finding_id": "POLICY-CIS-CONTAINER-13",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Remove Privileged Mode",
+        "command": "Set privileged: false in docker-compose.yml. Add security_opt: [no-new-privileges:true]. Use cap_add for specific capabilities only.",
+        "description": "Fix: Container runs in privileged mode (CIS Docker 5.4)"
+      },
+      {
+        "finding_id": "POLICY-CIS-CONTAINER-14",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Run as Non-Root",
+        "command": "Add to Dockerfile: RUN addgroup -S app && adduser -S app -G app\nUSER app",
+        "description": "Fix: Container runs as root user (CIS Docker 5.7)"
+      },
+      {
+        "finding_id": "POLICY-CIS-CONTAINER-15",
+        "type": "POLICY",
+        "strategy": "config_fix",
+        "confidence": "high",
+        "title": "Read-Only Root FS",
+        "command": "docker run --read-only --tmpfs /tmp --tmpfs /var/run <image>",
+        "description": "Fix: Container root filesystem is not read-only (CIS Docker 5.12)"
+      },
+      {
+        "finding_id": "CORR-EXPOSED-VULN-1",
+        "type": "CORRELATED",
+        "strategy": "multi_fix",
+        "confidence": "high",
+        "title": "Fix Exposed Vulnerability (2-step)",
+        "command": "1) Patch vulnerable package (see CVE fix)\n2) Block public access: aws s3api put-public-access-block ...",
+        "description": "Fix both vulnerability and exposure. Sources: CVE-2019-3462, POLICY-S3-PUBLIC-1"
+      },
+      {
+        "finding_id": "CORR-PRIV-ESCALATION-2",
+        "type": "CORRELATED",
+        "strategy": "multi_fix",
+        "confidence": "high",
+        "title": "Fix Privilege Escalation (2-step)",
+        "command": "1) Set privileged:false, add USER nonroot\n2) Replace Action:* with least-privilege",
+        "description": "Fix container privileges + IAM wildcards. Sources: POLICY-CIS-CONTAINER-13, POLICY-IAM-WILDCARD-6"
+      }
+    ],
+    "compliance": {
+      "frameworks_impacted": 3,
+      "nist_controls": [
+        "AC-2 (Account Management)",
+        "AC-3 (Access Enforcement)",
+        "AC-6 (Least Privilege)",
+        "AC-6(2) (Non-Privileged Access for Non-Security Functions)",
+        "AU-2 (Audit Events)",
+        "AU-3 (Content of Audit Records)",
+        "AU-6 (Audit Review)",
+        "CM-6 (Configuration Settings)",
+        "CM-7 (Least Functionality)",
+        "IA-2 (Identification and Authentication)",
+        "IA-2(1) (MFA to Privileged Accounts)",
+        "IA-2(2) (MFA to Non-Privileged Accounts)",
+        "RA-5 (Vulnerability Scanning)",
+        "SC-39 (Process Isolation)",
+        "SC-7 (Boundary Protection)",
+        "SI-2 (Flaw Remediation)"
+      ],
+      "iso27001_clauses": [
+        "A.12.4.1 (Event Logging)",
+        "A.12.4.3 (Administrator and Operator Logs)",
+        "A.12.6.1 (Management of Technical Vulnerabilities)",
+        "A.13.1.1 (Network Controls)",
+        "A.14.2.2 (System Change Control)",
+        "A.14.2.5 (Secure System Engineering Principles)",
+        "A.9.2.3 (Management of Privileged Access Rights)",
+        "A.9.4.1 (Information Access Restriction)",
+        "A.9.4.2 (Secure Log-on Procedures)"
+      ],
+      "hipaa_safeguards": [
+        "164.306(a) (General Requirements)",
+        "164.308(a)(1)(ii)(A) (Risk Analysis)",
+        "164.308(a)(1)(ii)(D) (Information System Activity Review)",
+        "164.308(a)(5)(ii)(B) (Protection from Malicious Software)",
+        "164.312(a)(1) (Access Control)",
+        "164.312(b) (Audit Controls)",
+        "164.312(d) (Person or Entity Authentication)",
+        "164.312(e)(1) (Transmission Security)"
+      ]
+    },
+    "scan_summary": {
+      "status": "completed",
+      "total_vulnerabilities": 8,
+      "severity_distribution": {
+        "CRITICAL": 2,
+        "HIGH": 3,
+        "MEDIUM": 2,
+        "LOW": 1
+      }
+    },
+    "policy_summary": {
+      "status": "completed",
+      "total_violations": 15,
+      "severity_distribution": {
+        "CRITICAL": 5,
+        "HIGH": 6,
+        "MEDIUM": 4,
+        "LOW": 0
+      }
+    },
+    "correlation_summary": {
+      "total_findings": 25,
+      "by_source": {
+        "trivy": 8,
+        "opa": 15,
+        "correlation": 2
+      },
+      "by_severity": {
+        "CRITICAL": 9,
+        "HIGH": 9,
+        "MEDIUM": 6,
+        "LOW": 1
+      },
+      "correlated_count": 2
+    },
+    "remediation_summary": {
+      "total": 25,
+      "by_strategy": {
+        "package_upgrade": 7,
+        "base_image_update": 1,
+        "config_fix": 15,
+        "multi_fix": 2
+      },
+      "by_confidence": {
+        "high": 24,
+        "medium": 1,
+        "low": 0
+      }
+    },
+    "execution_log": [
+      "[23:00:30] Scanner \u2014 loading from file: E:\\sun\\cloudshield\\sample_data\\sample_trivy_output.json",
+      "[23:00:30] \u2713 Scanner \u2014 8 vulnerabilities found (2 CRITICAL) [0.0s]",
+      "[23:00:30] Policy Engine \u2014 evaluating: E:\\sun\\cloudshield\\sample_data\\bad_aws_config.json",
+      "[23:00:30] \u2713 Policy Engine \u2014 15 violations (5 CRITICAL) [0.02s]",
+      "[23:00:30] \u2713 Correlation \u2014 2 cross-source findings [0.0s]",
+      "[23:00:30] \u2713 Risk Scoring \u2014 Score: 3.16 (HIGH) [0.0s]",
+      "[23:00:30] \u2713 Remediation \u2014 25 fix actions [0.0s]",
+      "[23:00:30] \u2713 Compliance \u2014 Mapped to 3 frameworks [0.0s]"
+    ]
+  }
+}

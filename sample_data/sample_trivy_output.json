@@ -1,0 +1,95 @@
+{
+  "_schema_description": "This file documents the expected Trivy JSON output structure. Generate real data with: trivy image --format json --output trivy_output.json <image_name>",
+  "SchemaVersion": 2,
+  "ArtifactName": "nginx:1.14",
+  "ArtifactType": "container_image",
+  "Results": [
+    {
+      "Target": "nginx:1.14 (debian 9.13)",
+      "Class": "os-pkgs",
+      "Type": "debian",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2021-3449",
+          "PkgName": "openssl",
+          "InstalledVersion": "1.1.0l-1~deb9u1",
+          "FixedVersion": "1.1.0l-1~deb9u6",
+          "Severity": "HIGH",
+          "Title": "OpenSSL: NULL pointer deref in signature_algorithms processing",
+          "Description": "An OpenSSL TLS server may crash if sent a maliciously crafted renegotiation ClientHello message.",
+          "References": ["https://nvd.nist.gov/vuln/detail/CVE-2021-3449"]
+        },
+        {
+          "VulnerabilityID": "CVE-2021-23840",
+          "PkgName": "openssl",
+          "InstalledVersion": "1.1.0l-1~deb9u1",
+          "FixedVersion": "1.1.0l-1~deb9u6",
+          "Severity": "HIGH",
+          "Title": "OpenSSL: Integer overflow in CipherUpdate",
+          "Description": "Calls to EVP_CipherUpdate, EVP_EncryptUpdate and EVP_DecryptUpdate may overflow.",
+          "References": ["https://nvd.nist.gov/vuln/detail/CVE-2021-23840"]
+        },
+        {
+          "VulnerabilityID": "CVE-2019-3462",
+          "PkgName": "apt",
+          "InstalledVersion": "1.4.9",
+          "FixedVersion": "1.4.11",
+          "Severity": "CRITICAL",
+          "Title": "apt: Incorrect handling of HTTP redirects in package downloads",
+          "Description": "Incorrect handling of HTTP redirects allows MITM attacks leading to arbitrary code execution.",
+          "References": ["https://nvd.nist.gov/vuln/detail/CVE-2019-3462"]
+        },
+        {
+          "VulnerabilityID": "CVE-2020-1971",
+          "PkgName": "openssl",
+          "InstalledVersion": "1.1.0l-1~deb9u1",
+          "FixedVersion": "1.1.0l-1~deb9u4",
+          "Severity": "MEDIUM",
+          "Title": "OpenSSL: NULL pointer deref in GENERAL_NAME_cmp",
+          "Description": "The X.509 GeneralName type can contain different types of name including EDIPARTYNAME.",
+          "References": ["https://nvd.nist.gov/vuln/detail/CVE-2020-1971"]
+        },
+        {
+          "VulnerabilityID": "CVE-2021-33574",
+          "PkgName": "glibc",
+          "InstalledVersion": "2.24-11+deb9u4",
+          "FixedVersion": "",
+          "Severity": "CRITICAL",
+          "Title": "glibc: mq_notify does not handle separately allocated thread attributes",
+          "Description": "The mq_notify function in the GNU C Library has a use-after-free vulnerability.",
+          "References": ["https://nvd.nist.gov/vuln/detail/CVE-2021-33574"]
+        },
+        {
+          "VulnerabilityID": "CVE-2019-18276",
+          "PkgName": "bash",
+          "InstalledVersion": "4.4-5",
+          "FixedVersion": "4.4-5+deb9u1",
+          "Severity": "LOW",
+          "Title": "bash: when effective UID is not equal to its real UID, the saved UID is not dropped",
+          "Description": "An issue was discovered in disable_priv_mode in shell.c in GNU Bash.",
+          "References": ["https://nvd.nist.gov/vuln/detail/CVE-2019-18276"]
+        },
+        {
+          "VulnerabilityID": "CVE-2020-8169",
+          "PkgName": "curl",
+          "InstalledVersion": "7.52.1-5+deb9u9",
+          "FixedVersion": "7.52.1-5+deb9u14",
+          "Severity": "HIGH",
+          "Title": "curl: Partial password leak over DNS on HTTP redirect",
+          "Description": "curl can be tricked to include part of the password in the host name before resolving it.",
+          "References": ["https://nvd.nist.gov/vuln/detail/CVE-2020-8169"]
+        },
+        {
+          "VulnerabilityID": "CVE-2018-16842",
+          "PkgName": "curl",
+          "InstalledVersion": "7.52.1-5+deb9u9",
+          "FixedVersion": "7.52.1-5+deb9u10",
+          "Severity": "MEDIUM",
+          "Title": "curl: Heap-based buffer over-read in the curl tool warning formatting",
+          "Description": "Curl versions 7.14.1 through 7.61.1 are vulnerable to a heap-based buffer over-read.",
+          "References": ["https://nvd.nist.gov/vuln/detail/CVE-2018-16842"]
+        }
+      ]
+    }
+  ]
+}

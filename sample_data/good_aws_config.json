@@ -1,0 +1,48 @@
+{
+  "s3_buckets": [
+    {
+      "name": "app-data-secure-bucket",
+      "region": "us-east-1",
+      "acl": "private",
+      "public_access_block": {
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true
+      },
+      "encryption": {
+        "enabled": true,
+        "algorithm": "AES256"
+      },
+      "versioning": true,
+      "logging": {
+        "enabled": true,
+        "target_bucket": "access-logs-bucket"
+      }
+    }
+  ],
+  "iam_roles": [
+    {
+      "name": "app-readonly-role",
+      "policies": [
+        {
+          "name": "S3ReadOnly",
+          "effect": "Allow",
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::app-data-secure-bucket/*"
+        }
+      ],
+      "mfa_required": true
+    }
+  ],
+  "cloudtrail": {
+    "enabled": true,
+    "multi_region": true,
+    "log_file_validation": true
+  },
+  "container_config": {
+    "privileged": false,
+    "run_as_root": false,
+    "read_only_rootfs": true
+  }
+}
