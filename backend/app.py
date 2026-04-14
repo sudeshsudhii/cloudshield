@@ -1,5 +1,5 @@
 """
-CloudShield Flask API
+CloudShield Flask API v2.0
 Backend API with CORS, rate limiting, and raw config scanning.
 """
 
