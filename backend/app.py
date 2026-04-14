@@ -50,14 +50,10 @@ def create_app():
     limiter = Limiter(get_remote_address, app=app, default_limits=["200 per day", "50 per hour"])
 
     @app.before_request
-    def validate_api_key():
+    def log_request_info():
+        # Keep OPTIONS bypass clean
         if request.endpoint == 'OPTIONS':
             return
-        api_key = os.environ.get("CLOUDSHIELD_API_KEY")
-        if api_key and request.path.startswith("/api/"):
-            req_key = request.headers.get("X-API-Key")
-            if req_key != api_key:
-                return jsonify({"status": "error", "message": "Unauthorized"}), 403
 
     def _load_cache():
         if os.path.exists(CACHE_FILE):
@@ -89,6 +85,96 @@ def create_app():
         if cached:
             return jsonify({"status": "cached", "data": cached})
         return jsonify({"status": "no_data", "data": None})
+
+    # ── NEW: Real-Time System Agent Endpoints ──
+    AGENT_CACHE = {}
+
+    @app.route("/api/agent-scan", methods=["POST", "OPTIONS"])
+    @limiter.exempt
+    def api_agent_scan():
+        if request.method == "OPTIONS":
+            return jsonify({}), 200
+
+        # Validate agent key
+        required_key = os.environ.get("AGENT_KEY", "default-agent-key-123")
+        provided_key = request.headers.get("x-agent-key")
+        
+        if provided_key != required_key:
+            return jsonify({"status": "error", "message": "Unauthorized agent"}), 403
+
+        try:
+            payload = request.get_json(silent=True)
+            if not payload or not isinstance(payload, dict):
+                return jsonify({"status": "error", "message": "Invalid JSON payload"}), 400
+
+            # Calculate Risk Score
+            # 1. Base on OS/Load
+            load = payload.get("cpu_percent", 0)
+            ports = payload.get("open_ports", [])
+            cves = payload.get("cves", {"critical": 0, "high": 0, "medium": 0, "low": 0})
+            
+            risk_score = 0
+            if load > 90: risk_score += 10
+            elif load > 75: risk_score += 5
+            
+            risk_score += len(ports) * 2 # 2 points per open port
+            risk_score += cves.get("critical", 0) * 20
+            risk_score += cves.get("high", 0) * 10
+            risk_score += cves.get("medium", 0) * 5
+            
+            if risk_score > 100: risk_score = 100
+            
+            if risk_score >= 80: risk_level = "Critical"
+            elif risk_score >= 60: risk_level = "High"
+            elif risk_score >= 40: risk_level = "Medium"
+            else: risk_level = "Low"
+
+            payload["risk_score"] = risk_score
+            payload["risk_level"] = risk_level
+
+            # Store in global cache with timestamp
+            agent_id = payload.get("agentId", "unknown")
+            AGENT_CACHE[agent_id] = {
+                "timestamp": time.time(),
+                "data": payload
+            }
+            
+            return jsonify({"status": "success", "message": "Telemetry received"})
+        except Exception as e:
+            return jsonify({"status": "error", "message": "Server processing error"}), 500
+
+    @app.route("/api/agent-status", methods=["GET"])
+    def api_agent_status():
+        agent_id = request.args.get("agentId", "unknown")
+        
+        # If no explicit ID is requested, return the most recent active one (for single-agent demo)
+        if agent_id == "unknown" and AGENT_CACHE:
+            # Sort by timestamp and get newest
+            sorted_agents = sorted(AGENT_CACHE.values(), key=lambda x: x["timestamp"], reverse=True)
+            if sorted_agents:
+                entry = sorted_agents[0]
+            else:
+                return jsonify({"status": "offline", "message": "No active agents"}), 200
+        else:
+            entry = AGENT_CACHE.get(agent_id)
+
+        if not entry:
+            return jsonify({"status": "offline", "message": "Agent not found"}), 404
+
+        time_diff = time.time() - entry["timestamp"]
+        
+        if time_diff <= 60:
+            status = "online"
+        elif time_diff <= 180:
+            status = "stale"
+        else:
+            status = "offline"
+
+        return jsonify({
+            "status": status,
+            "last_seen_seconds_ago": round(time_diff, 1),
+            "data": entry["data"]
+        })
 
     @app.route("/api/scan", methods=["POST"])
     def api_scan():

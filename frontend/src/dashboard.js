@@ -23,6 +23,27 @@ let trendChart = null;
 // ── Initialize ──
 document.addEventListener('DOMContentLoaded', () => {
     loadCachedResults();
+    
+    // Panel navigation
+    const pastePanel = document.getElementById('config-panel');
+    const telemetryPanel = document.getElementById('telemetry-panel');
+    const s3Panel = document.getElementById('s3-check-panel');
+    
+    document.getElementById('btn-paste-panel')?.addEventListener('click', () => {
+        pastePanel.classList.remove('hidden');
+        telemetryPanel.classList.add('hidden');
+        s3Panel.classList.add('hidden');
+    });
+    
+    document.getElementById('btn-telemetry-panel')?.addEventListener('click', () => {
+        telemetryPanel.classList.remove('hidden');
+        pastePanel.classList.add('hidden');
+        s3Panel.classList.add('hidden');
+    });
+
+    // Start Telemetry Polling
+    fetchAgentTelemetry();
+    setInterval(fetchAgentTelemetry, 10000); // 10 seconds
 });
 
 // ── API Calls ──
@@ -290,6 +311,75 @@ function exportStorageReport() {
 document.addEventListener('DOMContentLoaded', () => {
     // Initial prep
 });
+
+// ── NEW: Agent Telemetry Polling ──
+async function fetchAgentTelemetry() {
+    try {
+        const res = await fetch(`${API_BASE}/api/agent-status`);
+        if(!res.ok) return;
+        const json = await res.json();
+        
+        const badge = document.getElementById('agent-status-badge');
+        const content = document.getElementById('telemetry-content');
+        const loading = document.getElementById('telemetry-loading');
+        if(!badge || !content || !loading) return;
+
+        if(json.status === 'offline') {
+            badge.textContent = 'Offline';
+            badge.style.background = 'var(--bg-primary)';
+            badge.style.color = 'var(--text-secondary)';
+            content.style.display = 'none';
+            loading.style.display = 'block';
+            return;
+        }
+
+        badge.textContent = json.status === 'online' ? 'Online' : 'Stale';
+        badge.style.background = json.status === 'online' ? 'rgba(34,197,94,0.15)' : 'rgba(234,179,8,0.15)';
+        badge.style.color = json.status === 'online' ? 'var(--color-low)' : 'var(--color-medium)';
+        
+        content.style.display = 'block';
+        loading.style.display = 'none';
+
+        const data = json.data;
+        document.getElementById('agent-hostname').textContent = data.hostname || '-';
+        document.getElementById('agent-os').textContent = data.os || '-';
+        
+        document.getElementById('agent-risk-level').textContent = data.risk_level || 'LOW';
+        document.getElementById('agent-risk-level').style.color = 
+            data.risk_level === 'Critical' ? 'var(--color-critical)' : 
+            data.risk_level === 'High' ? 'var(--color-high)' : 
+            data.risk_level === 'Medium' ? 'var(--color-medium)' : 'var(--color-low)';
+        document.getElementById('agent-risk-score').textContent = data.risk_score || '0';
+
+        const cpu = data.cpu_percent || 0;
+        document.getElementById('agent-cpu-text').textContent = cpu + '%';
+        document.getElementById('agent-cpu-bar').style.width = cpu + '%';
+        
+        const ram = data.ram_percent || 0;
+        document.getElementById('agent-ram-text').textContent = ram + '%';
+        document.getElementById('agent-ram-bar').style.width = ram + '%';
+
+        const cves = data.cves || {critical:0, high:0, medium:0, low:0};
+        document.getElementById('cve-crit').textContent = cves.critical;
+        document.getElementById('cve-high').textContent = cves.high;
+        document.getElementById('cve-med').textContent = cves.medium;
+        document.getElementById('cve-low').textContent = cves.low;
+
+        const portsList = document.getElementById('agent-ports-list');
+        const ports = data.open_ports || [];
+        if(ports.length > 0) {
+            portsList.innerHTML = ports.map(p => `<li style="margin-bottom:0.2rem;"><code style="background:var(--bg-primary); padding:0.1rem 0.3rem;">${p.port}</code> <span style="color:var(--text-secondary)">${p.ip}</span></li>`).join('');
+        } else {
+            portsList.innerHTML = '<li>No open ports detected.</li>';
+        }
+
+        document.getElementById('agent-last-updated').textContent = `${json.last_seen_seconds_ago}s ago`;
+
+    } catch(err) {
+        // silent
+    }
+}
+
 async function checkS3Bucket() {
     const bucketName = document.getElementById('s3-bucket-name').value.trim();
     const providerEle = document.querySelector('input[name="cloud-provider"]:checked');

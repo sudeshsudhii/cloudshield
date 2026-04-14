@@ -24,10 +24,13 @@
                     <span class="btn-icon">⚡</span> Run Scan
                 </button>
                 <button id="btn-demo" class="btn btn-accent" onclick="runDemo()">
-                    <span class="btn-icon">🔄</span> Demo Mode
+                    <span class="pulse-dot"></span> Live Scan
                 </button>
-                <button id="btn-paste" class="btn btn-paste" onclick="toggleConfigPanel()">
+                <button class="btn btn-outline" id="btn-paste-panel">
                     <span class="btn-icon">📋</span> Paste & Scan
+                </button>
+                <button class="btn btn-outline" id="btn-telemetry-panel">
+                    <span class="btn-icon">💻</span> Endpoints
                 </button>
             </div>
         </div>
@@ -124,6 +127,80 @@ Example JSON:
             
             <!-- Result Container -->
             <div id="s3-check-result" style="margin-top: 1rem; padding: 1rem; border-radius: 4px; background: rgba(0,0,0,0.2); display: none;"></div>
+        </section>
+
+        <!-- System Telemetry Panel (NEW) -->
+        <section id="telemetry-panel" class="section config-panel hidden" style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h2 class="section-title">💻 Local Agent Telemetry</h2>
+                    <p class="config-description">Real-time stats from active CloudShield agents. Ensure your agent is running directly on the host.</p>
+                </div>
+                <div>
+                    <span id="agent-status-badge" class="badge badge-low" style="background:var(--bg-primary); border: 1px solid var(--border-glass); color:var(--text-secondary);">Offline</span>
+                </div>
+            </div>
+
+            <div id="telemetry-content" style="display: none; margin-top: 1rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 4px;">
+                        <h3 style="margin-top: 0; font-size: 0.9rem; color: var(--text-secondary);">Host Identity</h3>
+                        <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 0.25rem;" id="agent-hostname">-</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);" id="agent-os">-</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <h3 style="margin-top: 0; font-size: 0.9rem; color: var(--text-secondary); width: 100%; text-align: left;">Risk Level</h3>
+                        <div id="agent-risk-level" style="font-size: 1.5rem; font-weight: bold; color: var(--color-low);">LOW</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Score: <span id="agent-risk-score">0</span>/100</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem; font-size: 0.85rem;">
+                            <span>CPU Usage</span>
+                            <span id="agent-cpu-text">0%</span>
+                        </div>
+                        <div class="progress-bar-bg" style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                            <div id="agent-cpu-bar" style="width: 0%; height: 100%; background: var(--color-info); transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem; font-size: 0.85rem;">
+                            <span>RAM Usage</span>
+                            <span id="agent-ram-text">0%</span>
+                        </div>
+                        <div class="progress-bar-bg" style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                            <div id="agent-ram-bar" style="width: 0%; height: 100%; background: var(--color-medium); transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 4px; max-height: 150px; overflow-y: auto;">
+                        <h3 style="margin-top: 0; font-size: 0.9rem; color: var(--text-secondary);">Open Ports</h3>
+                        <ul id="agent-ports-list" style="list-style-type: none; padding: 0; margin: 0; font-size: 0.85rem;">
+                            <li>No open ports detected.</li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 4px;">
+                        <h3 style="margin-top: 0; font-size: 0.9rem; color: var(--text-secondary);">Trivy CVE Density</h3>
+                        <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                            <div style="text-align: center;"><div style="font-size: 1.2rem; font-weight: bold; color: var(--color-critical);" id="cve-crit">0</div><div style="font-size: 0.7rem;">CRIT</div></div>
+                            <div style="text-align: center;"><div style="font-size: 1.2rem; font-weight: bold; color: var(--color-high);" id="cve-high">0</div><div style="font-size: 0.7rem;">HIGH</div></div>
+                            <div style="text-align: center;"><div style="font-size: 1.2rem; font-weight: bold; color: var(--color-medium);" id="cve-med">0</div><div style="font-size: 0.7rem;">MED</div></div>
+                            <div style="text-align: center;"><div style="font-size: 1.2rem; font-weight: bold; color: var(--color-low);" id="cve-low">0</div><div style="font-size: 0.7rem;">LOW</div></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem; text-align: right; font-size: 0.75rem; color: var(--text-secondary);">
+                    Last updated: <span id="agent-last-updated">-</span>
+                </div>
+            </div>
+            <div id="telemetry-loading" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                Waiting for agent connection...
+            </div>
         </section>
 
         <!-- Alerts Section (NEW) -->
