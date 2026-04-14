@@ -320,60 +320,142 @@ async function fetchAgentTelemetry() {
         const json = await res.json();
         
         const badge = document.getElementById('agent-status-badge');
-        const content = document.getElementById('telemetry-content');
+        const container = document.getElementById('telemetry-container');
         const loading = document.getElementById('telemetry-loading');
-        if(!badge || !content || !loading) return;
+        if(!badge || !container || !loading) return;
 
-        if(json.status === 'offline') {
+        if(!json.agents || json.agents.length === 0) {
             badge.textContent = 'Offline';
             badge.style.background = 'var(--bg-primary)';
             badge.style.color = 'var(--text-secondary)';
-            content.style.display = 'none';
+            container.innerHTML = '';
             loading.style.display = 'block';
+            
+            // Clear any fleet banners
+            const existingBanner = document.getElementById('fleet-critical-banner');
+            if (existingBanner) existingBanner.remove();
             return;
         }
 
-        badge.textContent = json.status === 'online' ? 'Online' : 'Stale';
-        badge.style.background = json.status === 'online' ? 'rgba(34,197,94,0.15)' : 'rgba(234,179,8,0.15)';
-        badge.style.color = json.status === 'online' ? 'var(--color-low)' : 'var(--color-medium)';
-        
-        content.style.display = 'block';
+        const agents = json.agents;
         loading.style.display = 'none';
 
-        const data = json.data;
-        document.getElementById('agent-hostname').textContent = data.hostname || '-';
-        document.getElementById('agent-os').textContent = data.os || '-';
+        const onlineCount = agents.filter(a => a.connection_status === 'online').length;
+        badge.textContent = `${onlineCount}/${agents.length} Online`;
+        badge.style.background = onlineCount > 0 ? 'rgba(34,197,94,0.15)' : 'rgba(234,179,8,0.15)';
+        badge.style.color = onlineCount > 0 ? 'var(--color-low)' : 'var(--color-medium)';
+
+        let fleetHasCritical = false;
+
+        container.innerHTML = agents.map(agent => {
+            if (agent.risk_level === 'Critical') fleetHasCritical = true;
+
+            const riskColor = 
+                agent.risk_level === 'Critical' ? 'var(--color-critical)' : 
+                agent.risk_level === 'High' ? 'var(--color-high)' : 
+                agent.risk_level === 'Medium' ? 'var(--color-medium)' : 'var(--color-low)';
+
+            const cpu = agent.cpu_percent || 0;
+            const ram = agent.ram_percent || 0;
+            const cves = agent.cves || {critical:0, high:0};
+            
+            let portsHtml = '<li>No open ports detected.</li>';
+            if (agent.open_ports && agent.open_ports.length > 0) {
+                portsHtml = agent.open_ports.map(p => 
+                    `<li style="margin-bottom:0.2rem;"><code style="background:var(--bg-primary); padding:0.1rem 0.3rem;">${p.port}</code> <span style="color:var(--text-secondary)">${p.ip}</span></li>`
+                ).join('');
+            }
+
+            return `
+            <div style="border: 1px solid var(--border-glass); border-radius: 6px; overflow: hidden; background: rgba(255,255,255,0.02); margin-bottom: 1rem;">
+                <!-- Card Header -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-glass); background: rgba(0,0,0,0.2);">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="font-size:1.2rem;">🖥️</span>
+                        <div>
+                            <div style="font-weight:bold; font-size:1rem;">${escapeHtml(agent.hostname || 'Unknown')}</div>
+                            <div style="font-size:0.75rem; color:var(--text-secondary);">${escapeHtml(agent.agentId)} | v${escapeHtml(agent.agentVersion || '1.0')}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <span class="badge ${agent.connection_status === 'online' ? 'badge-low' : 'badge-medium'}">${agent.connection_status.toUpperCase()}</span>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.1rem; font-weight: bold; color: ${riskColor};">${agent.risk_level} RISK</div>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Score: ${agent.risk_score} | Health: ${agent.healthScore}%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card Body -->
+                <div style="padding: 1rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem; font-size: 0.85rem;">
+                                <span>CPU Usage</span>
+                                <span>${cpu}%</span>
+                            </div>
+                            <div class="progress-bar-bg" style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                                <div style="width: ${cpu}%; height: 100%; background: var(--color-info); transition: width 0.3s ease;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem; font-size: 0.85rem;">
+                                <span>RAM Usage</span>
+                                <span>${ram}%</span>
+                            </div>
+                            <div class="progress-bar-bg" style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                                <div style="width: ${ram}%; height: 100%; background: var(--color-medium); transition: width 0.3s ease;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 4px; max-height: 150px; overflow-y: auto;">
+                            <h3 style="margin-top: 0; font-size: 0.9rem; color: var(--text-secondary);">Open Ports</h3>
+                            <ul style="list-style-type: none; padding: 0; margin: 0; font-size: 0.85rem;">
+                                ${portsHtml}
+                            </ul>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 4px;">
+                            <h3 style="margin-top: 0; font-size: 0.9rem; color: var(--text-secondary);">Trivy CVE Density</h3>
+                            <div style="display: flex; gap: 1rem; margin-top: 0.5rem; justify-content: space-around;">
+                                <div style="text-align: center;"><div style="font-size: 1.2rem; font-weight: bold; color: var(--color-critical);">${cves.critical || 0}</div><div style="font-size: 0.7rem;">CRIT</div></div>
+                                <div style="text-align: center;"><div style="font-size: 1.2rem; font-weight: bold; color: var(--color-high);">${cves.high || 0}</div><div style="font-size: 0.7rem;">HIGH</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; text-align: right; font-size: 0.75rem; color: var(--text-secondary);">
+                        Last updated: ${agent.last_seen_seconds_ago}s ago
+                    </div>
+                </div>
+            </div>
+            `;
+        }).join('');
+
+        // Critical Banner Logic
+        const telemetrySection = document.getElementById('telemetry-panel');
+        let existingBanner = document.getElementById('fleet-critical-banner');
         
-        document.getElementById('agent-risk-level').textContent = data.risk_level || 'LOW';
-        document.getElementById('agent-risk-level').style.color = 
-            data.risk_level === 'Critical' ? 'var(--color-critical)' : 
-            data.risk_level === 'High' ? 'var(--color-high)' : 
-            data.risk_level === 'Medium' ? 'var(--color-medium)' : 'var(--color-low)';
-        document.getElementById('agent-risk-score').textContent = data.risk_score || '0';
-
-        const cpu = data.cpu_percent || 0;
-        document.getElementById('agent-cpu-text').textContent = cpu + '%';
-        document.getElementById('agent-cpu-bar').style.width = cpu + '%';
-        
-        const ram = data.ram_percent || 0;
-        document.getElementById('agent-ram-text').textContent = ram + '%';
-        document.getElementById('agent-ram-bar').style.width = ram + '%';
-
-        const cves = data.cves || {critical:0, high:0, medium:0, low:0};
-        document.getElementById('cve-crit').textContent = cves.critical;
-        document.getElementById('cve-high').textContent = cves.high;
-        document.getElementById('cve-med').textContent = cves.medium;
-        document.getElementById('cve-low').textContent = cves.low;
-
-        const portsList = document.getElementById('agent-ports-list');
-        const ports = data.open_ports || [];
-        if(ports.length > 0) {
-            portsList.innerHTML = ports.map(p => `<li style="margin-bottom:0.2rem;"><code style="background:var(--bg-primary); padding:0.1rem 0.3rem;">${p.port}</code> <span style="color:var(--text-secondary)">${p.ip}</span></li>`).join('');
-        } else {
-            portsList.innerHTML = '<li>No open ports detected.</li>';
+        if (fleetHasCritical) {
+            if (!existingBanner) {
+                const banner = document.createElement('div');
+                banner.id = 'fleet-critical-banner';
+                banner.style.padding = '0.75rem 1rem';
+                banner.style.background = 'rgba(239,68,68,0.2)';
+                banner.style.border = '1px solid var(--color-critical)';
+                banner.style.borderRadius = '6px';
+                banner.style.margin = '1rem 0';
+                banner.style.color = 'var(--color-critical)';
+                banner.style.display = 'flex';
+                banner.style.alignItems = 'center';
+                banner.style.gap = '0.5rem';
+                banner.innerHTML = `<strong>🚨 CRITICAL ALERT:</strong> One or more agents in your fleet are flagged as critical risk. Please execute immediate remediation.`;
+                telemetrySection.insertBefore(banner, container);
+            }
+        } else if (existingBanner) {
+            existingBanner.remove();
         }
-
-        document.getElementById('agent-last-updated').textContent = `${json.last_seen_seconds_ago}s ago`;
 
     } catch(err) {
         // silent

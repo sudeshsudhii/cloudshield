@@ -13,6 +13,8 @@ import boto3
 import re
 from botocore.exceptions import ClientError, BotoCoreError
 from botocore.config import Config
+import hmac
+import hashlib
 
 # Multi-cloud SDKs
 from azure.storage.blob import BlobServiceClient
@@ -88,6 +90,7 @@ def create_app():
 
     # ── NEW: Real-Time System Agent Endpoints ──
     AGENT_CACHE = {}
+    NONCE_CACHE = set()
 
     @app.route("/api/agent-scan", methods=["POST", "OPTIONS"])
     @limiter.exempt
@@ -95,32 +98,59 @@ def create_app():
         if request.method == "OPTIONS":
             return jsonify({}), 200
 
-        # Validate agent key
+        # Enforce Payload Size Limit (512KB)
+        if request.content_length and request.content_length > 512 * 1024:
+            return jsonify({"status": "error", "message": "Payload too large"}), 413
+
         required_key = os.environ.get("AGENT_KEY", "default-agent-key-123")
-        provided_key = request.headers.get("x-agent-key")
+        provided_signature = request.headers.get("x-agent-signature")
         
-        if provided_key != required_key:
-            return jsonify({"status": "error", "message": "Unauthorized agent"}), 403
+        if not provided_signature:
+            return jsonify({"status": "error", "message": "Missing cryptographic signature"}), 403
+
+        raw_data = request.get_data()
+        
+        # Verify HMAC-SHA256 Signature
+        expected_signature = hmac.new(required_key.encode('utf-8'), raw_data, hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(provided_signature, expected_signature):
+            return jsonify({"status": "error", "message": "Invalid signature. Spoofing detected."}), 403
 
         try:
-            payload = request.get_json(silent=True)
-            if not payload or not isinstance(payload, dict):
-                return jsonify({"status": "error", "message": "Invalid JSON payload"}), 400
+            payload = json.loads(raw_data.decode('utf-8'))
+            if not isinstance(payload, dict):
+                return jsonify({"status": "error", "message": "Invalid JSON mapping"}), 400
+            
+            # Anti-Replay: Nonce check
+            nonce = payload.get("nonce")
+            if not nonce or nonce in NONCE_CACHE:
+                return jsonify({"status": "error", "message": "Replay attack detected"}), 403
+            NONCE_CACHE.add(nonce)
+            # Basic cleanup of old nonces in memory (keeps last 10k)
+            if len(NONCE_CACHE) > 10000:
+                NONCE_CACHE.clear()
+
+            # Timestamp Drift validation (Max 60 seconds)
+            agent_timestamp = payload.get("timestamp", 0)
+            if abs(time.time() - agent_timestamp) > 60:
+                return jsonify({"status": "error", "message": "Payload timestamp expired"}), 403
+
+            # Validate agentId format (basic alphanumeric/hyphen)
+            agent_id = str(payload.get("agentId", "unknown"))
+            if not re.match(r"^[a-zA-Z0-9\-]{10,50}$", agent_id):
+                return jsonify({"status": "error", "message": "Invalid Agent ID format"}), 400
 
             # Calculate Risk Score
-            # 1. Base on OS/Load
             load = payload.get("cpu_percent", 0)
             ports = payload.get("open_ports", [])
-            cves = payload.get("cves", {"critical": 0, "high": 0, "medium": 0, "low": 0})
+            cves = payload.get("cves", {"critical": 0, "high": 0})
             
             risk_score = 0
             if load > 90: risk_score += 10
             elif load > 75: risk_score += 5
             
-            risk_score += len(ports) * 2 # 2 points per open port
+            risk_score += len(ports) * 2 
             risk_score += cves.get("critical", 0) * 20
             risk_score += cves.get("high", 0) * 10
-            risk_score += cves.get("medium", 0) * 5
             
             if risk_score > 100: risk_score = 100
             
@@ -133,47 +163,51 @@ def create_app():
             payload["risk_level"] = risk_level
 
             # Store in global cache with timestamp
-            agent_id = payload.get("agentId", "unknown")
             AGENT_CACHE[agent_id] = {
                 "timestamp": time.time(),
                 "data": payload
             }
             
             return jsonify({"status": "success", "message": "Telemetry received"})
-        except Exception as e:
+        except Exception:
             return jsonify({"status": "error", "message": "Server processing error"}), 500
 
     @app.route("/api/agent-status", methods=["GET"])
     def api_agent_status():
-        agent_id = request.args.get("agentId", "unknown")
+        # Return all active agents instead of just one
+        agents = []
+        now = time.time()
+        dead_agents = []
         
-        # If no explicit ID is requested, return the most recent active one (for single-agent demo)
-        if agent_id == "unknown" and AGENT_CACHE:
-            # Sort by timestamp and get newest
-            sorted_agents = sorted(AGENT_CACHE.values(), key=lambda x: x["timestamp"], reverse=True)
-            if sorted_agents:
-                entry = sorted_agents[0]
+        for a_id, entry in AGENT_CACHE.items():
+            time_diff = now - entry["timestamp"]
+            
+            if time_diff > 300: # TTL 5 minutes to fully drop
+                dead_agents.append(a_id)
+                continue
+                
+            if time_diff <= 60:
+                status = "online"
+            elif time_diff <= 180:
+                status = "stale"
             else:
-                return jsonify({"status": "offline", "message": "No active agents"}), 200
-        else:
-            entry = AGENT_CACHE.get(agent_id)
-
-        if not entry:
-            return jsonify({"status": "offline", "message": "Agent not found"}), 404
-
-        time_diff = time.time() - entry["timestamp"]
-        
-        if time_diff <= 60:
-            status = "online"
-        elif time_diff <= 180:
-            status = "stale"
-        else:
-            status = "offline"
-
+                status = "offline"
+                
+            agent_data = dict(entry["data"])
+            agent_data["connection_status"] = status
+            agent_data["last_seen_seconds_ago"] = round(time_diff, 1)
+            # Add health score based on time and metrics
+            health = 100 - min(100, (time_diff/60)*10)
+            agent_data["healthScore"] = round(health)
+            
+            agents.append(agent_data)
+            
+        for a_id in dead_agents:
+            del AGENT_CACHE[a_id]
+            
         return jsonify({
-            "status": status,
-            "last_seen_seconds_ago": round(time_diff, 1),
-            "data": entry["data"]
+            "status": "success",
+            "agents": agents
         })
 
     @app.route("/api/scan", methods=["POST"])
