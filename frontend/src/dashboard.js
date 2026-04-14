@@ -88,7 +88,9 @@ async function loadCachedResults() {
 // ── NEW: Paste & Scan Raw Config ──
 function toggleConfigPanel() {
     const panel = document.getElementById('config-panel');
+    const s3Panel = document.getElementById('s3-check-panel');
     panel.classList.toggle('hidden');
+    if (s3Panel) s3Panel.classList.toggle('hidden');
     if (!panel.classList.contains('hidden')) {
         document.getElementById('config-editor').focus();
     }
@@ -204,6 +206,60 @@ async function scanRawConfig() {
         showPipelineError();
     }
     setButtonsDisabled(false);
+}
+
+// ── NEW: Single S3 Bucket Check ──
+async function checkS3Bucket() {
+    const bucketName = document.getElementById('s3-bucket-name').value.trim();
+    const resultDiv = document.getElementById('s3-check-result');
+    const btn = document.getElementById('btn-check-s3');
+
+    if (!bucketName) {
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<span style="color:var(--color-critical)">❌ Please enter a bucket name</span>';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Checking...';
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = '<span style="color:var(--color-info)">⏳ Checking AWS S3 configuration...</span>';
+
+    try {
+        const res = await fetch(`${API_BASE}/api/check-bucket`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bucket: bucketName })
+        });
+        
+        const json = await res.json();
+        
+        if (json.status === 'error') {
+            resultDiv.innerHTML = `<span style="color:var(--color-critical)">❌ Error: ${escapeHtml(json.message)}</span>`;
+        } else {
+            const isPublic = json.isPublic;
+            const statusColor = isPublic ? 'var(--color-critical)' : 'var(--color-low)';
+            const statusIcon = isPublic ? '🚨' : '✅';
+            const statusText = isPublic ? 'PUBLICLY ACCESSIBLE' : 'SECURE (Private)';
+            
+            resultDiv.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong>Bucket:</strong> <code>${escapeHtml(json.bucket)}</code>
+                </div>
+                <div style="margin-top:0.5rem; font-size:1.1rem; color:${statusColor}; font-weight:bold;">
+                    ${statusIcon} ${statusText}
+                </div>
+                <div style="margin-top:0.5rem; font-size:0.85rem; color:var(--text-secondary);">
+                    Status: ${json.status}
+                </div>
+            `;
+        }
+    } catch (e) {
+        resultDiv.innerHTML = `<span style="color:var(--color-critical)">❌ Connection failed: ${e.message}</span>`;
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<span class="btn-icon">☁️</span> Check Bucket';
 }
 
 // ── NEW: Render Alerts ──
@@ -593,6 +649,7 @@ window.clearConfigEditor = clearConfigEditor;
 window.loadSampleBadConfig = loadSampleBadConfig;
 window.scanRawConfig = scanRawConfig;
 window.copyCommand = copyCommand;
+window.checkS3Bucket = checkS3Bucket;
 
 // ── Log ──
 function clearLog() {

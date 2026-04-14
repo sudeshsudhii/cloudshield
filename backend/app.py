@@ -9,6 +9,8 @@ import sys
 import time
 import tempfile
 import yaml
+import boto3
+from botocore.exceptions import ClientError, BotoCoreError
 from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -104,6 +106,77 @@ def create_app():
 
         _save_cache(before)
         return jsonify({"status": "completed", "data": demo_data})
+
+    # ── NEW: S3 Bucket Check Endpoint ──
+    @app.route("/api/check-bucket", methods=["POST"])
+    def api_check_bucket():
+        try:
+            # Safely parse req.body and handle errors
+            body = request.get_json(silent=True)
+            if body is None:
+                return jsonify({"status": "error", "message": "Failed to parse JSON configuration"}), 400
+
+            bucket_name = body.get("bucket", "")
+            if not isinstance(bucket_name, str) or not bucket_name.strip():
+                return jsonify({"status": "error", "message": "Bucket name is required and must be a string"}), 400
+
+            bucket_name = bucket_name.strip()
+            print(f"[AWS] Checking S3 bucket: {bucket_name}")
+
+            # Configure boto3 using environment variables automatically
+            s3_client = boto3.client('s3')
+            
+            # 1. get_public_access_block
+            blocks_public_acls = False
+            try:
+                pab = s3_client.get_public_access_block(Bucket=bucket_name)
+                config = pab.get('PublicAccessBlockConfiguration', {})
+                blocks_public_acls = config.get('BlockPublicAcls', False) and config.get('IgnorePublicAcls', False)
+            except ClientError as e:
+                error_code = e.response['Error']['Code']
+                if error_code == 'NoSuchPublicAccessBlockConfiguration':
+                    blocks_public_acls = False
+                elif error_code == 'AccessDenied':
+                    print(f"[AWS Error] Access Denied checking PublicAccessBlock for {bucket_name}")
+                    return jsonify({"status": "error", "message": "Access Denied. Check AWS credentials."}), 403
+                elif error_code == 'NoSuchBucket':
+                    print(f"[AWS Error] Bucket {bucket_name} not found")
+                    return jsonify({"status": "error", "message": f"Bucket '{bucket_name}' not found."}), 404
+                else:
+                    print(f"[AWS Error] {str(e)}")
+                    return jsonify({"status": "error", "message": f"AWS Error: {str(e)}"}), 500
+            except BotoCoreError as e:
+                print(f"[AWS Error] BotoCoreError: {str(e)}")
+                return jsonify({"status": "error", "message": f"AWS Configuration error: {str(e)}"}), 500
+
+            # 2. get_bucket_acl
+            has_public_acl = False
+            try:
+                acl = s3_client.get_bucket_acl(Bucket=bucket_name)
+                for grant in acl.get('Grants', []):
+                    grantee = grant.get('Grantee', {})
+                    if grantee.get('URI') in [
+                        'http://acs.amazonaws.com/groups/global/AllUsers',
+                        'http://acs.amazonaws.com/groups/global/AuthenticatedUsers'
+                    ]:
+                        has_public_acl = True
+                        break
+            except ClientError as e:
+                print(f"[AWS Error] Error fetching ACLs for {bucket_name}: {str(e)}")
+                pass
+
+            # Detect public access: AllUsers ACL + no block
+            is_public = has_public_acl and not blocks_public_acls
+
+            return jsonify({
+                "bucket": bucket_name,
+                "isPublic": is_public,
+                "status": "FAIL" if is_public else "PASS"
+            })
+            
+        except Exception as e:
+            print(f"[System Error] {str(e)}")
+            return jsonify({"status": "error", "message": str(e)}), 500
 
     # ── NEW: Raw Config Scan Endpoint ──
     @app.route("/api/scan-config", methods=["POST"])
