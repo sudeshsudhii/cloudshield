@@ -372,6 +372,10 @@ function showPipelineDone() {
     });
 }
 
+// ── Expose to global scope for inline onclick handlers ──
+window.runScan = runScan;
+window.runDemo = runDemo;
+
 // ── Log ──
 function clearLog() {
     document.getElementById('execution-log').innerHTML = '';
